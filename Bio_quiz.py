@@ -1,3 +1,4 @@
+import time
 import streamlit as st
 
 # ตั้งค่าหน้าเว็บ
@@ -7,10 +8,13 @@ st.set_page_config(
     layout="centered"
 )
 
-# URL สำหรับดึงรูปภาพจาก GitHub (อย่าลืมเปลี่ยน USERNAME และ REPO)
+# กำหนดเวลารวมของเกม (วินาที)
+TOTAL_TIME_LIMIT = 120
+
+# URL สำหรับดึงรูปภาพจาก GitHub
 GITHUB_RAW_BASE = "https://raw.githubusercontent.com/409-01-Gopkun/Bio_quiz/main/Images/"
 
-# คลังข้อมูลข้อสอบ (ต้องมี options 4 ตัวเลือกเสมอ)
+# คลังข้อมูลข้อสอบ
 QUIZ_DATA = [
     {
         "image": GITHUB_RAW_BASE + "glucose.png",
@@ -30,19 +34,19 @@ QUIZ_DATA = [
         "answer": "ค. Cholesterol",
         "hint": "ไม่มี"
     },
-     {
+    {
         "image": GITHUB_RAW_BASE + "rna.jpg",
         "options": ["ก. RNA", "ข. DNA", "ค. Deoxyribose", "ง. Ribose"],
         "answer": "ง. Ribose",
         "hint": "ไม่มี"
     },
-     {
+    {
         "image": GITHUB_RAW_BASE + "pyrimidines.png",
         "options": ["ก. Purines", "ข. Pyrimidines", "ค. Pentoses", "ง. Aldehyde"],
         "answer": "ข. Pyrimidines",
         "hint": "ไม่มี"
     },
-     {
+    {
         "image": GITHUB_RAW_BASE + "amino-acid.jpg",
         "options": ["ก. Amino Acid", "ข. Hexoses", "ค. Lipids", "ง. Carbohydrates"],
         "answer": "ก. Amino Acid",
@@ -59,6 +63,10 @@ if "answered" not in st.session_state:
     st.session_state.answered = False
 if "selected_option" not in st.session_state:
     st.session_state.selected_option = None
+if "start_time" not in st.session_state:
+    st.session_state.start_time = time.time()
+if "game_over_by_time" not in st.session_state:
+    st.session_state.game_over_by_time = False
 
 def next_question():
     st.session_state.current_question += 1
@@ -70,16 +78,32 @@ def restart_game():
     st.session_state.score = 0
     st.session_state.answered = False
     st.session_state.selected_option = None
+    st.session_state.start_time = time.time()
+    st.session_state.game_over_by_time = False
+
+# คำนวณเวลาที่เหลือ
+elapsed_time = time.time() - st.session_state.start_time
+remaining_time = max(0, int(TOTAL_TIME_LIMIT - elapsed_time))
+
+if remaining_time <= 0:
+    st.session_state.game_over_by_time = True
 
 # UI หลัก
-st.title("🧬 เกมทายโครงสร้างสารชีวโมเลกุล by NongGluay56")
+st.title("🧬 เกมทายโครงสร้างสารชีวโมเลกุล")
 
-if st.session_state.current_question < len(QUIZ_DATA):
+# ตรวจสอบว่าเกมจบหรือยัง (ทำครบทุกข้อ หรือ หมดเวลา)
+is_game_finished = (st.session_state.current_question >= len(QUIZ_DATA)) or st.session_state.game_over_by_time
+
+if not is_game_finished:
     q_idx = st.session_state.current_question
     q_data = QUIZ_DATA[q_idx]
 
-    # แถบแสดงสถานะ
-    st.caption(f"ข้อที่ {q_idx + 1} / {len(QUIZ_DATA)}  |  คะแนนสะสม: {st.session_state.score}")
+    # แถบแสดงสถานะและตัวจับเวลา
+    col_info, col_timer = st.columns([2, 1])
+    with col_info:
+        st.caption(f"ข้อที่ {q_idx + 1} / {len(QUIZ_DATA)}  |  คะแนนสะสม: {st.session_state.score}")
+    with col_timer:
+        st.markdown(f"⏱️ **เวลาที่เหลือ: {remaining_time} วินาที**")
     
     # แสดงรูปภาพโครงสร้างสาร
     st.image(q_data["image"], caption="ภาพโครงสร้างโมเลกุล", use_container_width=True)
@@ -119,9 +143,14 @@ if st.session_state.current_question < len(QUIZ_DATA):
         st.button("ข้อถัดไป ➔", on_click=next_question, type="primary")
 
 else:
-    # หน้าสรุปผลลัพธ์เมื่อทำครบทุกข้อ
-    st.balloons()
+    # หน้าสรุปผลลัพธ์เมื่อทำครบทุกข้อหรือหมดเวลา
+    if st.session_state.game_over_by_time:
+        st.error("⏰ **Time Up ไอ่ดํา!**")
+    else:
+        st.balloons()
+        st.success("🎉 **Very Goodทำครบทุกข้อแล้ว!**")
+        
     st.header("🏆 สรุปผลการเล่น")
-    st.subheader(f"คุณทำได้ **{st.session_state.score}** จาก **{len(QUIZ_DATA)}** คะแนน")
+    st.subheader(f"Youทำได้ **{st.session_state.score}** จาก **{len(QUIZ_DATA)}** คะแนน")
     
     st.button("🔄 ลองอีกครั้ง", on_click=restart_game, type="primary")
