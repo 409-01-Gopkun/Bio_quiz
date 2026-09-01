@@ -155,7 +155,7 @@ if not is_game_finished:
     # แสดงผลลัพธ์หลังเลือกคำตอบ
     if st.session_state.answered:
         if st.session_state.selected_option == q_data["answer"]:
-            st.success(f"✅ **ถูกได้ไงวะ ใช่ AI หรอ!** {q_data['hint']}")
+            st.success(f"✅ **ถูกได้ไงวะ ใช้ AI หรอ!** {q_data['hint']}")
         else:
             st.error(f"❌ **ผิดไอ่สึ่งตึง ง่าวชิบหาย!** ข้อถูกคือ **{q_data['answer']}**")
         
