@@ -64,7 +64,7 @@ if "start_time" not in st.session_state:
 if "game_over_by_time" not in st.session_state:
     st.session_state.game_over_by_time = False
 
-# Callback เมื่อผู้เล่นกดเลือกคำตอบ
+# Callbacks
 def handle_answer(choice, correct_answer):
     if not st.session_state.answered:
         st.session_state.answered = True
@@ -85,12 +85,17 @@ def restart_game():
     st.session_state.start_time = time.time()
     st.session_state.game_over_by_time = False
 
-# คำนวณเวลาที่เหลือ
-elapsed_time = time.time() - st.session_state.start_time
-remaining_time = max(0, int(TOTAL_TIME_LIMIT - elapsed_time))
-
-if remaining_time <= 0:
-    st.session_state.game_over_by_time = True
+# ฟังก์ชันแสดงเวลาแบบ Real-time โดยไม่ rerun ทั้งหน้ากระดาน
+@st.fragment(run_every=1.0)
+def render_timer():
+    elapsed_time = time.time() - st.session_state.start_time
+    remaining_time = max(0, int(TOTAL_TIME_LIMIT - elapsed_time))
+    
+    if remaining_time <= 0 and not st.session_state.game_over_by_time:
+        st.session_state.game_over_by_time = True
+        st.rerun()
+        
+    st.markdown(f"⏱️ **เวลาที่เหลือ: {remaining_time} วินาที**")
 
 st.title("🧬 เกมทายโครงสร้างสารชีวโมเลกุล")
 
@@ -104,16 +109,17 @@ if not is_game_finished:
     with col_info:
         st.caption(f"ข้อที่ {q_idx + 1} / {len(QUIZ_DATA)}  |  คะแนนสะสม: {st.session_state.score}")
     with col_timer:
-        st.markdown(f"⏱️ **เวลาที่เหลือ: {remaining_time} วินาที**")
+        render_timer()
     
     st.image(q_data["image"], caption="ภาพโครงสร้างโมเลกุล", use_container_width=True)
     st.markdown("### **เดาข้อที่คิดว่าใช่:**")
 
-    # ปุ่มกด 4 ตัวเลือกโดยใช้ on_click callback เพื่อป้องกัน State ค้าง
+    # ใส่ key แยกตาม q_idx เพื่อไม่ให้ปุ่มจำ State ซ้ำข้อเดิม
     col1, col2 = st.columns(2)
     with col1:
         st.button(
             q_data["options"][0], 
+            key=f"btn_{q_idx}_0",
             use_container_width=True, 
             disabled=st.session_state.answered,
             on_click=handle_answer,
@@ -121,6 +127,7 @@ if not is_game_finished:
         )
         st.button(
             q_data["options"][2], 
+            key=f"btn_{q_idx}_2",
             use_container_width=True, 
             disabled=st.session_state.answered,
             on_click=handle_answer,
@@ -130,6 +137,7 @@ if not is_game_finished:
     with col2:
         st.button(
             q_data["options"][1], 
+            key=f"btn_{q_idx}_1",
             use_container_width=True, 
             disabled=st.session_state.answered,
             on_click=handle_answer,
@@ -137,6 +145,7 @@ if not is_game_finished:
         )
         st.button(
             q_data["options"][3], 
+            key=f"btn_{q_idx}_3",
             use_container_width=True, 
             disabled=st.session_state.answered,
             on_click=handle_answer,
@@ -150,12 +159,7 @@ if not is_game_finished:
         else:
             st.error(f"❌ **ผิดไอ่โง่ ง่ายชิบหาย!** ข้อถูกคือ **{q_data['answer']}**")
         
-        st.button("ข้อถัดไป ➔", on_click=next_question, type="primary")
-
-    # Real-time Timer Loop
-    if not st.session_state.answered and remaining_time > 0:
-        time.sleep(1)
-        st.rerun()
+        st.button("ข้อถัดไป ➔", on_click=next_question, type="primary", key=f"next_{q_idx}")
 
 else:
     if st.session_state.game_over_by_time:
@@ -166,4 +170,4 @@ else:
         
     st.header("🏆 สรุปผลการเล่น")
     st.subheader(f"คุณทำได้ **{st.session_state.score}** จาก **{len(QUIZ_DATA)}** คะแนน")
-    st.button("🔄 ลองอีกครั้ง", on_click=restart_game, type="primary")
+    st.button("🔄 ลองอีกครั้ง", on_click=restart_game, type="primary", key="restart_btn")
