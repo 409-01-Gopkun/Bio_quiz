@@ -29,6 +29,24 @@ QUIZ_DATA = [
         "options": ["ก. Phospholipid", "ข. Triglyceride", "ค. Cholesterol", "ง. Prostaglandin"],
         "answer": "ค. Cholesterol",
         "hint": "เป็นลิพิดกลุ่มสเตียรอยด์ที่เป็นองค์ประกอบสำคัญของเยื่อหุ้มเซลล์"
+    },
+     {
+        "image": GITHUB_RAW_BASE + "cholesterol.png",
+        "options": ["ก. Phospholipid", "ข. Triglyceride", "ค. Cholesterol", "ง. Prostaglandin"],
+        "answer": "ค. Cholesterol",
+        "hint": "เป็นลิพิดกลุ่มสเตียรอยด์ที่เป็นองค์ประกอบสำคัญของเยื่อหุ้มเซลล์"
+    },
+     {
+        "image": GITHUB_RAW_BASE + "cholesterol.png",
+        "options": ["ก. Phospholipid", "ข. Triglyceride", "ค. Cholesterol", "ง. Prostaglandin"],
+        "answer": "ค. Cholesterol",
+        "hint": "เป็นลิพิดกลุ่มสเตียรอยด์ที่เป็นองค์ประกอบสำคัญของเยื่อหุ้มเซลล์"
+    },
+     {
+        "image": GITHUB_RAW_BASE + "cholesterol.png",
+        "options": ["ก. Phospholipid", "ข. Triglyceride", "ค. Cholesterol", "ง. Prostaglandin"],
+        "answer": "ค. Cholesterol",
+        "hint": "เป็นลิพิดกลุ่มสเตียรอยด์ที่เป็นองค์ประกอบสำคัญของเยื่อหุ้มเซลล์"
     }
 ]
 
