@@ -8,7 +8,7 @@ st.set_page_config(
     layout="centered"
 )
 
-# กำหนดเวลารวมของเกม (วินาที)
+# กำหนดเวลารวมของเกม (120 วินาที)
 TOTAL_TIME_LIMIT = 120
 
 # URL สำหรับดึงรูปภาพจาก GitHub
@@ -20,37 +20,37 @@ QUIZ_DATA = [
         "image": GITHUB_RAW_BASE + "glucose.png",
         "options": ["ก. Glucose", "ข. Fructose", "ค. Galactose", "ง. Ribose"],
         "answer": "ก. Glucose",
-        "hint": "คําใบ้ ไม่มีนะจ่ะ"
+        "hint": "ไม่มี"
     },
     {
         "image": GITHUB_RAW_BASE + "dna.jpg",
         "options": ["ก. Ribose", "ข. Deoxyribose", "ค. Aldehyde", "ง. Ketone"],
         "answer": "ข. Deoxyribose",
-        "hint": "คําใบ้ ไม่มีนะจ่ะ"
+        "hint": "ไม่มี"
     },
     {
         "image": GITHUB_RAW_BASE + "cholesterol.png",
         "options": ["ก. Phospholipid", "ข. Triglyceride", "ค. Cholesterol", "ง. Estrogen"],
         "answer": "ค. Cholesterol",
-        "hint": "คําใบ้ ไม่มีนะจ่ะ"
+        "hint": "ไม่มี"
     },
     {
         "image": GITHUB_RAW_BASE + "rna.jpg",
         "options": ["ก. RNA", "ข. DNA", "ค. Deoxyribose", "ง. Ribose"],
         "answer": "ง. Ribose",
-        "hint": "คําใบ้ ไม่มีนะจ่ะ"
+        "hint": "ไม่มี"
     },
     {
         "image": GITHUB_RAW_BASE + "pyrimidines.png",
         "options": ["ก. Purines", "ข. Pyrimidines", "ค. Pentoses", "ง. Aldehyde"],
         "answer": "ข. Pyrimidines",
-        "hint": "คําใบ้ ไม่มีนะจ่ะ"
+        "hint": "ไม่มี"
     },
     {
         "image": GITHUB_RAW_BASE + "amino-acid.jpg",
         "options": ["ก. Amino Acid", "ข. Hexoses", "ค. Lipids", "ง. Carbohydrates"],
         "answer": "ก. Amino Acid",
-        "hint": "คําใบ้ ไม่มีนะจ่ะ"
+        "hint": "ไม่มี"
     }
 ]
 
@@ -91,7 +91,7 @@ if remaining_time <= 0:
 # UI หลัก
 st.title("🧬 เกมทายโครงสร้างสารชีวโมเลกุล by NongGluay56")
 
-# ตรวจสอบว่าเกมจบหรือยัง (ทำครบทุกข้อ หรือ หมดเวลา)
+# ตรวจสอบว่าเกมจบหรือยัง
 is_game_finished = (st.session_state.current_question >= len(QUIZ_DATA)) or st.session_state.game_over_by_time
 
 if not is_game_finished:
@@ -103,15 +103,15 @@ if not is_game_finished:
     with col_info:
         st.caption(f"ข้อที่ {q_idx + 1} / {len(QUIZ_DATA)}  |  คะแนนสะสม: {st.session_state.score}")
     with col_timer:
+        # ใช้ st.empty() เพื่อให้อัปเดตตัวเลขเวลาได้แบบ Real-time
         st.markdown(f"⏱️ **เวลาที่เหลือ: {remaining_time} วินาที**")
     
     # แสดงรูปภาพโครงสร้างสาร
     st.image(q_data["image"], caption="ภาพโครงสร้างโมเลกุล", use_container_width=True)
     st.markdown("### **เดาข้อที่คิดว่าใช่:**")
 
-    # จัดวางปุ่ม 4 ตัวเลือกเป็น 2 แถว แถวละ 2 ปุ่ม (Grid 2x2)
+    # ปุ่ม 4 ตัวเลือก (Grid 2x2)
     col1, col2 = st.columns(2)
-    
     with col1:
         btn_a = st.button(q_data["options"][0], use_container_width=True, disabled=st.session_state.answered)
         btn_c = st.button(q_data["options"][2], use_container_width=True, disabled=st.session_state.answered)
@@ -120,7 +120,7 @@ if not is_game_finished:
         btn_b = st.button(q_data["options"][1], use_container_width=True, disabled=st.session_state.answered)
         btn_d = st.button(q_data["options"][3], use_container_width=True, disabled=st.session_state.answered)
 
-    # เช็กการกดปุ่มของผู้เล่น
+    # เช็กการกดตอบ
     choice = None
     if btn_a: choice = q_data["options"][0]
     if btn_b: choice = q_data["options"][1]
@@ -132,8 +132,9 @@ if not is_game_finished:
         st.session_state.selected_option = choice
         if choice == q_data["answer"]:
             st.session_state.score += 1
+        st.rerun()
 
-    # แสดงผลลัพธ์หลังเลือกคำตอบ
+    # แสดงเฉลยหลังเลือกคำตอบ
     if st.session_state.answered:
         if st.session_state.selected_option == q_data["answer"]:
             st.success(f"✅ **ถูกได้ไงวะ ใช่ AI หรอ!** {q_data['hint']}")
@@ -142,15 +143,21 @@ if not is_game_finished:
         
         st.button("ข้อถัดไป ➔", on_click=next_question, type="primary")
 
+    # --- ส่วนที่ทำให้ Real-time ---
+    # จะ rerun หน้ารอวิถัดไปเฉพาะตอนที่ยังไม่ได้กดตอบคำตอบข้อนั้น
+    if not st.session_state.answered and remaining_time > 0:
+        time.sleep(1)
+        st.rerun()
+
 else:
-    # หน้าสรุปผลลัพธ์เมื่อทำครบทุกข้อหรือหมดเวลา
+    # หน้าสรุปผลลัพธ์เมื่อจบเกม
     if st.session_state.game_over_by_time:
-        st.error("⏰ **Time Up ไอ่ดํา!**")
+        st.error("⏰ **ช้าไป ไอ่น้อง!**")
     else:
         st.balloons()
-        st.success("🎉 **Very Goodทำครบทุกข้อแล้ว!**")
+        st.success("🎉 **ไวเหมือน ไอรีนเลย!**")
         
     st.header("🏆 สรุปผลการเล่น")
-    st.subheader(f"Youทำได้ **{st.session_state.score}** จาก **{len(QUIZ_DATA)}** คะแนน")
+    st.subheader(f"โหดจัดทำได้ **{st.session_state.score}** จาก **{len(QUIZ_DATA)}** คะแนน")
     
     st.button("🔄 ลองอีกครั้ง", on_click=restart_game, type="primary")
