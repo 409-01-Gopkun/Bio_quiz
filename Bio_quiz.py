@@ -8,7 +8,7 @@ st.set_page_config(
 )
 
 # URL สำหรับดึงรูปภาพจาก GitHub (อย่าลืมเปลี่ยน USERNAME และ REPO)
-GITHUB_RAW_BASE = "https://raw.githubusercontent.com/409-01-Gopkun/Bio_quiz/main/images/"
+GITHUB_RAW_BASE = "https://raw.githubusercontent.com/409-01-Gopkun/Bio_quiz/main/Images/"
 
 # คลังข้อมูลข้อสอบ (ต้องมี options 4 ตัวเลือกเสมอ)
 QUIZ_DATA = [
