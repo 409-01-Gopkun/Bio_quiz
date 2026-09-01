@@ -20,37 +20,37 @@ QUIZ_DATA = [
         "image": GITHUB_RAW_BASE + "glucose.png",
         "options": ["ก. Glucose", "ข. Fructose", "ค. Galactose", "ง. Ribose"],
         "answer": "ก. Glucose",
-        "hint": "ไม่มี"
+        "hint": "คําใบ้ ไม่มีนะจ่ะ"
     },
     {
         "image": GITHUB_RAW_BASE + "dna.jpg",
         "options": ["ก. Ribose", "ข. Deoxyribose", "ค. Aldehyde", "ง. Ketone"],
         "answer": "ข. Deoxyribose",
-        "hint": "ไม่มี"
+        "hint": "คําใบ้ ไม่มีนะจ่ะ"
     },
     {
         "image": GITHUB_RAW_BASE + "cholesterol.png",
         "options": ["ก. Phospholipid", "ข. Triglyceride", "ค. Cholesterol", "ง. Estrogen"],
         "answer": "ค. Cholesterol",
-        "hint": "ไม่มี"
+        "hint": "คําใบ้ ไม่มีนะจ่ะ"
     },
     {
         "image": GITHUB_RAW_BASE + "rna.jpg",
         "options": ["ก. RNA", "ข. DNA", "ค. Deoxyribose", "ง. Ribose"],
         "answer": "ง. Ribose",
-        "hint": "ไม่มี"
+        "hint": "คําใบ้ ไม่มีนะจ่ะ"
     },
     {
         "image": GITHUB_RAW_BASE + "pyrimidines.png",
         "options": ["ก. Purines", "ข. Pyrimidines", "ค. Pentoses", "ง. Aldehyde"],
         "answer": "ข. Pyrimidines",
-        "hint": "ไม่มี"
+        "hint": "คําใบ้ ไม่มีนะจ่ะ"
     },
     {
         "image": GITHUB_RAW_BASE + "amino-acid.jpg",
         "options": ["ก. Amino Acid", "ข. Hexoses", "ค. Lipids", "ง. Carbohydrates"],
         "answer": "ก. Amino Acid",
-        "hint": "ไม่มี"
+        "hint": "คําใบ้ ไม่มีนะจ่ะ"
     }
 ]
 
@@ -89,7 +89,7 @@ if remaining_time <= 0:
     st.session_state.game_over_by_time = True
 
 # UI หลัก
-st.title("🧬 เกมทายโครงสร้างสารชีวโมเลกุล")
+st.title("🧬 เกมทายโครงสร้างสารชีวโมเลกุล by NongGluay56")
 
 # ตรวจสอบว่าเกมจบหรือยัง (ทำครบทุกข้อ หรือ หมดเวลา)
 is_game_finished = (st.session_state.current_question >= len(QUIZ_DATA)) or st.session_state.game_over_by_time
