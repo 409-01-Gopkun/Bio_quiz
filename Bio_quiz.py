@@ -20,20 +20,20 @@ QUIZ_DATA = [
     },
     {
         "image": GITHUB_RAW_BASE + "dna.jpg",
-        "options": ["ก. RNA", "ข. DNA", "ค. ATP", "ง. Protein"],
-        "answer": "ข. DNA",
+        "options": ["ก. Ribose", "ข. Deoxyribose", "ค. Aldehyde", "ง. Ketone"],
+        "answer": "ข. Deoxyribose",
         "hint": "มีโครงสร้างเป็นสายคู่เกลียวสลับเวียนขวา (Double Helix)"
     },
     {
         "image": GITHUB_RAW_BASE + "cholesterol.png",
-        "options": ["ก. Phospholipid", "ข. Triglyceride", "ค. Cholesterol", "ง. Prostaglandin"],
+        "options": ["ก. Phospholipid", "ข. Triglyceride", "ค. Cholesterol", "ง. Estrogen"],
         "answer": "ค. Cholesterol",
         "hint": "เป็นลิพิดกลุ่มสเตียรอยด์ที่เป็นองค์ประกอบสำคัญของเยื่อหุ้มเซลล์"
     },
      {
         "image": GITHUB_RAW_BASE + "rna.jpg",
         "options": ["ก. RNA", "ข. DNA", "ค. Deoxyribose", "ง. Ribose"],
-        "answer": "ก. RNA",
+        "answer": "ง. Ribose",
         "hint": "เป็นลิพิดกลุ่มสเตียรอยด์ที่เป็นองค์ประกอบสำคัญของเยื่อหุ้มเซลล์"
     },
      {
@@ -43,9 +43,9 @@ QUIZ_DATA = [
         "hint": "เป็นลิพิดกลุ่มสเตียรอยด์ที่เป็นองค์ประกอบสำคัญของเยื่อหุ้มเซลล์"
     },
      {
-        "image": GITHUB_RAW_BASE + "cholesterol.png",
-        "options": ["ก. Phospholipid", "ข. Triglyceride", "ค. Cholesterol", "ง. Prostaglandin"],
-        "answer": "ค. Cholesterol",
+        "image": GITHUB_RAW_BASE + "amino-acid.jpg",
+        "options": ["ก. Amino Acid", "ข. Protien", "ค. Lipids", "ง. Carbohydrates"],
+        "answer": "ก. Amino Acid",
         "hint": "เป็นลิพิดกลุ่มสเตียรอยด์ที่เป็นองค์ประกอบสำคัญของเยื่อหุ้มเซลล์"
     }
 ]
