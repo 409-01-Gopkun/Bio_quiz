@@ -64,7 +64,7 @@ if st.session_state.current_question < len(QUIZ_DATA):
     st.caption(f"ข้อที่ {q_idx + 1} / {len(QUIZ_DATA)}  |  คะแนนสะสม: {st.session_state.score}")
     
     # แสดงรูปภาพโครงสร้างสาร
-    st.image(q_data["Image"], caption="ภาพโครงสร้างโมเลกุล", use_column_width=True)
+    st.image(q_data["Images"], caption="ภาพโครงสร้างโมเลกุล", use_column_width=True)
     st.markdown("### **เลือกคำตอบที่ถูกต้อง:**")
 
     # จัดวางปุ่ม 4 ตัวเลือกเป็น 2 แถว แถวละ 2 ปุ่ม (Grid 2x2)
