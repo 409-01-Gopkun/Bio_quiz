@@ -97,7 +97,7 @@ def render_timer():
         
     st.markdown(f"⏱️ **เวลาที่เหลือ: {remaining_time} วินาที**")
 
-st.title("🧬 เกมทายโครงสร้างสารชีวโมเลกุล")
+st.title("🧬 เกมทายโครงสร้างสารชีวโมเลกุล by NongGluay56")
 
 is_game_finished = (st.session_state.current_question >= len(QUIZ_DATA)) or st.session_state.game_over_by_time
 
@@ -157,17 +157,17 @@ if not is_game_finished:
         if st.session_state.selected_option == q_data["answer"]:
             st.success(f"✅ **ถูกได้ไงวะ ใช่ AI หรอ!** {q_data['hint']}")
         else:
-            st.error(f"❌ **ผิดไอ่โง่ ง่ายชิบหาย!** ข้อถูกคือ **{q_data['answer']}**")
+            st.error(f"❌ **ผิดไอ่สึ่งตึง ง่าวชิบหาย!** ข้อถูกคือ **{q_data['answer']}**")
         
         st.button("ข้อถัดไป ➔", on_click=next_question, type="primary", key=f"next_{q_idx}")
 
 else:
     if st.session_state.game_over_by_time:
-        st.error("⏰ **หมดเวลา 120 วินาทีแล้ว!**")
+        st.error("⏰ **ช้าเกิน ไอ่น้อง!**")
     else:
         st.balloons()
-        st.success("🎉 **คุณทำครบทุกข้อแล้ว!**")
+        st.success("🎉 **ไวจัด เหมือนไอรีนเลย!**")
         
     st.header("🏆 สรุปผลการเล่น")
-    st.subheader(f"คุณทำได้ **{st.session_state.score}** จาก **{len(QUIZ_DATA)}** คะแนน")
-    st.button("🔄 ลองอีกครั้ง", on_click=restart_game, type="primary", key="restart_btn")
+    st.subheader(f"คุณเดาถูก **{st.session_state.score}** จาก **{len(QUIZ_DATA)}** คะแนน")
+    st.button("🔄 สักรอบบ่", on_click=restart_game, type="primary", key="restart_btn")
