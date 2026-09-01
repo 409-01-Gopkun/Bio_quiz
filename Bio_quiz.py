@@ -11,6 +11,10 @@ st.set_page_config(
 TOTAL_TIME_LIMIT = 120
 GITHUB_RAW_BASE = "https://raw.githubusercontent.com/409-01-Gopkun/Bio_quiz/main/Images/"
 
+# ลิงก์ไฟล์เสียงเอฟเฟกต์ (สามารถเปลี่ยน URL เป็นไฟล์ .mp3 ที่ต้องการได้)
+SOUND_CORRECT_URL = "https://www.soundjay.com/buttons/sounds/button-3.mp3"
+SOUND_WRONG_URL = "https://www.soundjay.com/buttons/sounds/button-10.mp3"
+
 QUIZ_DATA = [
     {
         "image": GITHUB_RAW_BASE + "glucose.png",
@@ -63,6 +67,14 @@ if "start_time" not in st.session_state:
     st.session_state.start_time = time.time()
 if "game_over_by_time" not in st.session_state:
     st.session_state.game_over_by_time = False
+
+# ฟังก์ชันเล่นเสียงเอฟเฟกต์
+def play_sound(sound_url):
+    st.html(f"""
+        <audio autoplay hidden>
+            <source src="{sound_url}" type="audio/mp3">
+        </audio>
+    """)
 
 # Callbacks
 def handle_answer(choice, correct_answer):
@@ -152,11 +164,13 @@ if not is_game_finished:
             args=(q_data["options"][3], q_data["answer"])
         )
 
-    # แสดงผลลัพธ์หลังเลือกคำตอบ
+    # แสดงผลลัพธ์และเล่นเสียงหลังเลือกคำตอบ
     if st.session_state.answered:
         if st.session_state.selected_option == q_data["answer"]:
+            play_sound(SOUND_CORRECT_URL)
             st.success(f"✅ **ถูกได้ไงวะ ใช้ AI หรอ!** {q_data['hint']}")
         else:
+            play_sound(SOUND_WRONG_URL)
             st.error(f"❌ **ผิดไอ่สึ่งตึง ง่าวชิบหาย!** ข้อถูกคือ **{q_data['answer']}**")
         
         st.button("ข้อถัดไป ➔", on_click=next_question, type="primary", key=f"next_{q_idx}")
