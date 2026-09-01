@@ -8,13 +8,9 @@ st.set_page_config(
     layout="centered"
 )
 
-# กำหนดเวลารวมของเกม (120 วินาที)
 TOTAL_TIME_LIMIT = 120
-
-# URL สำหรับดึงรูปภาพจาก GitHub
 GITHUB_RAW_BASE = "https://raw.githubusercontent.com/409-01-Gopkun/Bio_quiz/main/Images/"
 
-# คลังข้อมูลข้อสอบ
 QUIZ_DATA = [
     {
         "image": GITHUB_RAW_BASE + "glucose.png",
@@ -54,7 +50,7 @@ QUIZ_DATA = [
     }
 ]
 
-# ตัวจัดการ State ของเกม
+# Init session states
 if "current_question" not in st.session_state:
     st.session_state.current_question = 0
 if "score" not in st.session_state:
@@ -67,6 +63,14 @@ if "start_time" not in st.session_state:
     st.session_state.start_time = time.time()
 if "game_over_by_time" not in st.session_state:
     st.session_state.game_over_by_time = False
+
+# Callback เมื่อผู้เล่นกดเลือกคำตอบ
+def handle_answer(choice, correct_answer):
+    if not st.session_state.answered:
+        st.session_state.answered = True
+        st.session_state.selected_option = choice
+        if choice == correct_answer:
+            st.session_state.score += 1
 
 def next_question():
     st.session_state.current_question += 1
@@ -88,53 +92,58 @@ remaining_time = max(0, int(TOTAL_TIME_LIMIT - elapsed_time))
 if remaining_time <= 0:
     st.session_state.game_over_by_time = True
 
-# UI หลัก
-st.title("🧬 เกมทายโครงสร้างสารชีวโมเลกุล by NongGluay56")
+st.title("🧬 เกมทายโครงสร้างสารชีวโมเลกุล")
 
-# ตรวจสอบว่าเกมจบหรือยัง
 is_game_finished = (st.session_state.current_question >= len(QUIZ_DATA)) or st.session_state.game_over_by_time
 
 if not is_game_finished:
     q_idx = st.session_state.current_question
     q_data = QUIZ_DATA[q_idx]
 
-    # แถบแสดงสถานะและตัวจับเวลา
     col_info, col_timer = st.columns([2, 1])
     with col_info:
         st.caption(f"ข้อที่ {q_idx + 1} / {len(QUIZ_DATA)}  |  คะแนนสะสม: {st.session_state.score}")
     with col_timer:
-        # ใช้ st.empty() เพื่อให้อัปเดตตัวเลขเวลาได้แบบ Real-time
         st.markdown(f"⏱️ **เวลาที่เหลือ: {remaining_time} วินาที**")
     
-    # แสดงรูปภาพโครงสร้างสาร
     st.image(q_data["image"], caption="ภาพโครงสร้างโมเลกุล", use_container_width=True)
     st.markdown("### **เดาข้อที่คิดว่าใช่:**")
 
-    # ปุ่ม 4 ตัวเลือก (Grid 2x2)
+    # ปุ่มกด 4 ตัวเลือกโดยใช้ on_click callback เพื่อป้องกัน State ค้าง
     col1, col2 = st.columns(2)
     with col1:
-        btn_a = st.button(q_data["options"][0], use_container_width=True, disabled=st.session_state.answered)
-        btn_c = st.button(q_data["options"][2], use_container_width=True, disabled=st.session_state.answered)
+        st.button(
+            q_data["options"][0], 
+            use_container_width=True, 
+            disabled=st.session_state.answered,
+            on_click=handle_answer,
+            args=(q_data["options"][0], q_data["answer"])
+        )
+        st.button(
+            q_data["options"][2], 
+            use_container_width=True, 
+            disabled=st.session_state.answered,
+            on_click=handle_answer,
+            args=(q_data["options"][2], q_data["answer"])
+        )
         
     with col2:
-        btn_b = st.button(q_data["options"][1], use_container_width=True, disabled=st.session_state.answered)
-        btn_d = st.button(q_data["options"][3], use_container_width=True, disabled=st.session_state.answered)
+        st.button(
+            q_data["options"][1], 
+            use_container_width=True, 
+            disabled=st.session_state.answered,
+            on_click=handle_answer,
+            args=(q_data["options"][1], q_data["answer"])
+        )
+        st.button(
+            q_data["options"][3], 
+            use_container_width=True, 
+            disabled=st.session_state.answered,
+            on_click=handle_answer,
+            args=(q_data["options"][3], q_data["answer"])
+        )
 
-    # เช็กการกดตอบ
-    choice = None
-    if btn_a: choice = q_data["options"][0]
-    if btn_b: choice = q_data["options"][1]
-    if btn_c: choice = q_data["options"][2]
-    if btn_d: choice = q_data["options"][3]
-
-    if choice and not st.session_state.answered:
-        st.session_state.answered = True
-        st.session_state.selected_option = choice
-        if choice == q_data["answer"]:
-            st.session_state.score += 1
-        st.rerun()
-
-    # แสดงเฉลยหลังเลือกคำตอบ
+    # แสดงผลลัพธ์หลังเลือกคำตอบ
     if st.session_state.answered:
         if st.session_state.selected_option == q_data["answer"]:
             st.success(f"✅ **ถูกได้ไงวะ ใช่ AI หรอ!** {q_data['hint']}")
@@ -143,21 +152,18 @@ if not is_game_finished:
         
         st.button("ข้อถัดไป ➔", on_click=next_question, type="primary")
 
-    # --- ส่วนที่ทำให้ Real-time ---
-    # จะ rerun หน้ารอวิถัดไปเฉพาะตอนที่ยังไม่ได้กดตอบคำตอบข้อนั้น
+    # Real-time Timer Loop
     if not st.session_state.answered and remaining_time > 0:
         time.sleep(1)
         st.rerun()
 
 else:
-    # หน้าสรุปผลลัพธ์เมื่อจบเกม
     if st.session_state.game_over_by_time:
-        st.error("⏰ **ช้าไป ไอ่น้อง!**")
+        st.error("⏰ **หมดเวลา 120 วินาทีแล้ว!**")
     else:
         st.balloons()
-        st.success("🎉 **ไวเหมือน ไอรีนเลย!**")
+        st.success("🎉 **คุณทำครบทุกข้อแล้ว!**")
         
     st.header("🏆 สรุปผลการเล่น")
-    st.subheader(f"โหดจัดทำได้ **{st.session_state.score}** จาก **{len(QUIZ_DATA)}** คะแนน")
-    
+    st.subheader(f"คุณทำได้ **{st.session_state.score}** จาก **{len(QUIZ_DATA)}** คะแนน")
     st.button("🔄 ลองอีกครั้ง", on_click=restart_game, type="primary")
