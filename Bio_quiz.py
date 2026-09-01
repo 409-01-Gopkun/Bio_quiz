@@ -2,7 +2,7 @@ import streamlit as st
 
 # ตั้งค่าหน้าเว็บ
 st.set_page_config(
-    page_title="เกมทายโครงสร้างสารชีวโมเลกุล",
+    page_title="เกมทายโครงสร้างสารชีวโมเลกุล by NongGluay56",
     page_icon="🧬",
     layout="centered"
 )
@@ -19,7 +19,7 @@ QUIZ_DATA = [
         "hint": "เป็นน้ำตาลโมเลกุลเดี่ยวที่เป็นแหล่งพลังงานหลักของร่างกาย"
     },
     {
-        "image": GITHUB_RAW_BASE + "dna.png",
+        "image": GITHUB_RAW_BASE + "dna.jpg",
         "options": ["ก. RNA", "ข. DNA", "ค. ATP", "ง. Protein"],
         "answer": "ข. DNA",
         "hint": "มีโครงสร้างเป็นสายคู่เกลียวสลับเวียนขวา (Double Helix)"
@@ -31,15 +31,15 @@ QUIZ_DATA = [
         "hint": "เป็นลิพิดกลุ่มสเตียรอยด์ที่เป็นองค์ประกอบสำคัญของเยื่อหุ้มเซลล์"
     },
      {
-        "image": GITHUB_RAW_BASE + "cholesterol.png",
-        "options": ["ก. Phospholipid", "ข. Triglyceride", "ค. Cholesterol", "ง. Prostaglandin"],
-        "answer": "ค. Cholesterol",
+        "image": GITHUB_RAW_BASE + "rna.jpg",
+        "options": ["ก. RNA", "ข. DNA", "ค. Deoxyribose", "ง. Ribose"],
+        "answer": "ก. RNA",
         "hint": "เป็นลิพิดกลุ่มสเตียรอยด์ที่เป็นองค์ประกอบสำคัญของเยื่อหุ้มเซลล์"
     },
      {
-        "image": GITHUB_RAW_BASE + "cholesterol.png",
-        "options": ["ก. Phospholipid", "ข. Triglyceride", "ค. Cholesterol", "ง. Prostaglandin"],
-        "answer": "ค. Cholesterol",
+        "image": GITHUB_RAW_BASE + "pyrimidines.png",
+        "options": ["ก. Purines", "ข. Pyrimidines", "ค. Pentoses", "ง. Aldehyde"],
+        "answer": "ข. Pyrimidines",
         "hint": "เป็นลิพิดกลุ่มสเตียรอยด์ที่เป็นองค์ประกอบสำคัญของเยื่อหุ้มเซลล์"
     },
      {
