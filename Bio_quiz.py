@@ -13,7 +13,7 @@ GITHUB_RAW_BASE = "https://raw.githubusercontent.com/409-01-Gopkun/Bio_quiz/main
 
 # ลิงก์ไฟล์เสียงเอฟเฟกต์ (สามารถเปลี่ยน URL เป็นไฟล์ .mp3 ที่ต้องการได้)
 SOUND_CORRECT_URL = "https://raw.githubusercontent.com/409-01-Gopkun/Bio_quiz/main/Audio/correct.mp3"
-SOUND_WRONG_URL = "https://www.soundjay.com/buttons/sounds/button-10.mp3"
+SOUND_WRONG_URL = "https://raw.githubusercontent.com/409-01-Gopkun/Bio_quiz/main/Audio/wrong.mp3"
 
 QUIZ_DATA = [
     {
