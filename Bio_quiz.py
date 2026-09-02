@@ -184,4 +184,4 @@ else:
         
     st.header("🏆 สรุปผลการเล่น")
     st.subheader(f"คุณเดาถูก **{st.session_state.score}** จาก **{len(QUIZ_DATA)}** คะแนน")
-    st.button("🔄 สักรอบบ่", on_click=restart_game, type="primary", key="restart_btn")
+    st.button("🔄 อีกสักรอบไหมไอ่น้อง", on_click=restart_game, type="primary", key="restart_btn")
